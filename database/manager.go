@@ -1,3 +1,4 @@
+// Package database provides database connection management and migration utilities.
 package database
 
 import (
@@ -13,32 +14,32 @@ import (
 	_ "github.com/jackc/pgx/v5/stdlib"
 )
 
-// DatabaseManager manages connections to the database and provides utility methods for health checks and stats
-type DatabaseManager struct {
+// Manager manages connections to the database and provides utility methods for health checks and stats
+type Manager struct {
 	db     *sql.DB
 	config *config.PostgresDatabase
 	pool   *pgxpool.Pool
 }
 
-// DatabaseManagerOption is a configuration function
-type DatabaseManagerOption func(*DatabaseManager) error
+// ManagerOption is a configuration function
+type ManagerOption func(*Manager) error
 
 // WithMigrations is an option to automatically run migrations
-func WithMigrations(migrationsPath string) DatabaseManagerOption {
-	return func(dm *DatabaseManager) error {
+func WithMigrations(migrationsPath string) ManagerOption {
+	return func(dm *Manager) error {
 		return RunMigrations(dm.db, migrationsPath, "public", "schema_migrations")
 	}
 }
 
 // WithMigrationsCustomSchema is an option to run migrations with custom schema and table
-func WithMigrationsCustomSchema(migrationsPath, schemaName, tableName string) DatabaseManagerOption {
-	return func(dm *DatabaseManager) error {
+func WithMigrationsCustomSchema(migrationsPath, schemaName, tableName string) ManagerOption {
+	return func(dm *Manager) error {
 		return RunMigrations(dm.db, migrationsPath, schemaName, tableName)
 	}
 }
 
-// NewDatabaseManager creates a new database manager
-func NewDatabaseManager(cfg *config.PostgresDatabase, opts ...DatabaseManagerOption) (*DatabaseManager, error) {
+// NewManager creates a new database manager
+func NewManager(cfg *config.PostgresDatabase, opts ...ManagerOption) (*Manager, error) {
 	if cfg == nil {
 		return nil, fmt.Errorf("database config cannot be nil")
 	}
@@ -84,8 +85,17 @@ func NewDatabaseManager(cfg *config.PostgresDatabase, opts ...DatabaseManagerOpt
 	}
 
 	// Configure pool with similar settings
-	poolConfig.MaxConns = int32(cfg.MaxOpenConns)
-	poolConfig.MinConns = int32(cfg.MaxIdleConns)
+	// Cap values to int32 max to avoid overflow
+	maxConns := cfg.MaxOpenConns
+	if maxConns > 2147483647 {
+		maxConns = 2147483647
+	}
+	minConns := cfg.MaxIdleConns
+	if minConns > 2147483647 {
+		minConns = 2147483647
+	}
+	poolConfig.MaxConns = int32(maxConns) // #nosec G115 -- values are capped to prevent overflow
+	poolConfig.MinConns = int32(minConns) // #nosec G115 -- values are capped to prevent overflow
 
 	pool, err := pgxpool.NewWithConfig(context.Background(), poolConfig)
 	if err != nil {
@@ -93,7 +103,7 @@ func NewDatabaseManager(cfg *config.PostgresDatabase, opts ...DatabaseManagerOpt
 		return nil, fmt.Errorf("error creating connection pool: %w", err)
 	}
 
-	dm := &DatabaseManager{
+	dm := &Manager{
 		db:     db,
 		config: cfg,
 		pool:   pool,
@@ -111,32 +121,32 @@ func NewDatabaseManager(cfg *config.PostgresDatabase, opts ...DatabaseManagerOpt
 }
 
 // GetDB returns the *sql.DB instance
-func (dm *DatabaseManager) GetDB() *sql.DB {
+func (dm *Manager) GetDB() *sql.DB {
 	return dm.db
 }
 
 // GetPool returns the *pgxpool.Pool instance for advanced operations
-func (dm *DatabaseManager) GetPool() *pgxpool.Pool {
+func (dm *Manager) GetPool() *pgxpool.Pool {
 	return dm.pool
 }
 
 // GetConfig returns the database configuration
-func (dm *DatabaseManager) GetConfig() *config.PostgresDatabase {
+func (dm *Manager) GetConfig() *config.PostgresDatabase {
 	return dm.config
 }
 
 // Ping tests the connection to the database
-func (dm *DatabaseManager) Ping(ctx context.Context) error {
+func (dm *Manager) Ping(ctx context.Context) error {
 	return dm.db.PingContext(ctx)
 }
 
 // Stats returns the connection pool statistics
-func (dm *DatabaseManager) Stats() sql.DBStats {
+func (dm *Manager) Stats() sql.DBStats {
 	return dm.db.Stats()
 }
 
 // Close closes all connections
-func (dm *DatabaseManager) Close() error {
+func (dm *Manager) Close() error {
 	var dbErr, poolErr error
 	if dm.pool != nil {
 		dm.pool.Close()
@@ -151,7 +161,7 @@ func (dm *DatabaseManager) Close() error {
 }
 
 // Health checks the health status of the database
-func (dm *DatabaseManager) Health(ctx context.Context) error {
+func (dm *Manager) Health(ctx context.Context) error {
 	if err := dm.Ping(ctx); err != nil {
 		return fmt.Errorf("database ping failed: %w", err)
 	}
@@ -166,6 +176,6 @@ func (dm *DatabaseManager) Health(ctx context.Context) error {
 }
 
 // PublicConnectionString returns the configuration information as a string without the password
-func (dm *DatabaseManager) PublicConnectionString() string {
+func (dm *Manager) PublicConnectionString() string {
 	return dm.config.PublicConnectionString()
 }

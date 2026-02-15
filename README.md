@@ -16,7 +16,7 @@ PostgreSQL database manager with connection pooling, health checks, and automati
 import "github.com/pixime/mapbot-shared/database"
 
 cfg := config.NewPostgresDatabase("localhost", 5432, "mydb", "user", "pass")
-dm, err := database.NewDatabaseManager(cfg, 
+dm, err := database.NewDatabaseManager(cfg,
     database.WithMigrations("./migrations"),
 )
 defer dm.Close()
@@ -29,6 +29,7 @@ pool := dm.GetPool()
 ```
 
 **Features:**
+
 - Connection pooling with configurable limits
 - Health checks and statistics
 - Automatic schema migrations via golang-migrate
@@ -78,7 +79,7 @@ func TestMyDatabase(t *testing.T) {
     // Automatically spins up PostGIS container, runs migrations, and cleans up
     dm, cleanup := testutils.SetupTestDatabaseManager(t)
     defer cleanup()
-    
+
     // Your tests here
     db := dm.GetDB()
     // ...
@@ -170,7 +171,7 @@ package main
 import (
     "context"
     "log"
-    
+
     "github.com/pixime/mapbot-shared/config"
     "github.com/pixime/mapbot-shared/database"
 )
@@ -186,7 +187,7 @@ func main() {
     )
     cfg.MaxOpenConns = 50
     cfg.SSLMode = "require"
-    
+
     // Initialize with automatic migrations
     dm, err := database.NewDatabaseManager(cfg,
         database.WithMigrations("./migrations"),
@@ -195,13 +196,13 @@ func main() {
         log.Fatalf("Failed to connect: %v", err)
     }
     defer dm.Close()
-    
+
     // Health check
     ctx := context.Background()
     if err := dm.Health(ctx); err != nil {
         log.Fatalf("Database unhealthy: %v", err)
     }
-    
+
     // Use the database
     db := dm.GetDB()
     rows, err := db.Query("SELECT id, name FROM users")
@@ -216,7 +217,7 @@ package mypackage_test
 
 import (
     "testing"
-    
+
     "github.com/pixime/mapbot-shared/testutils"
 )
 
@@ -224,21 +225,21 @@ func TestUserRepository(t *testing.T) {
     // Setup test database with migrations
     dm, cleanup := testutils.SetupTestDatabaseManager(t)
     defer cleanup()
-    
+
     // Create repository
     repo := NewUserRepository(dm.GetDB())
-    
+
     // Test your code
     err := repo.CreateUser(&User{Name: "Alice"})
     if err != nil {
         t.Fatalf("Failed to create user: %v", err)
     }
-    
+
     users, err := repo.ListUsers()
     if err != nil {
         t.Fatalf("Failed to list users: %v", err)
     }
-    
+
     if len(users) != 1 {
         t.Errorf("Expected 1 user, got %d", len(users))
     }

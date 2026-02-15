@@ -140,6 +140,7 @@ curl "https://proxy.golang.org/github.com/pixime/mapbot-shared/@latest"
 After repository is set up:
 
 1. **Update dependent projects:**
+
    ```bash
    cd ../mapbot-ai
    go get github.com/pixime/mapbot-shared@v0.1.0

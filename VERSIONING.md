@@ -44,16 +44,19 @@ golangci-lint run
 Determine the version number based on changes:
 
 **Breaking changes (MAJOR):**
+
 - Changed function signatures
 - Removed public functions/types
 - Changed behavior that breaks existing code
 
 **New features (MINOR):**
+
 - Added new functions/packages
 - New optional parameters
 - Enhanced existing features (backward-compatible)
 
 **Bug fixes (PATCH):**
+
 - Fixed bugs
 - Performance improvements
 - Documentation updates
@@ -89,6 +92,7 @@ git push origin v0.2.0
 ## 📋 Version History
 
 ### v0.1.0 (Initial Release)
+
 - Database manager with PostgreSQL/PostGIS support
 - Configuration utilities
 - Structured logging
@@ -219,6 +223,7 @@ git push origin v0.2.0
 Cannot delete published versions from Go proxy. Options:
 
 1. **Retract the version** (Go 1.16+):
+
    ```go
    // In go.mod
    retract v0.2.0 // Accidentally published wrong version

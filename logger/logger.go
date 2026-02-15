@@ -1,54 +1,54 @@
+// Package logger provides structured logging utilities with environment-based configuration.
 package logger
-package logger
 
+import (
+	"log/slog"
+	"os"
+	"strings"
 
+	"github.com/joho/godotenv"
+)
 
+// Logger is the global logger instance used throughout the application.
+var Logger *slog.Logger
 
+func init() {
+	_ = godotenv.Load()
+	level := getLogLevel()
 
+	opts := &slog.HandlerOptions{
+		Level: level,
+	}
 
+	// Choose the format based on the env variable LOG_FORMAT
+	var handler slog.Handler
+	if os.Getenv("LOG_FORMAT") == "json" {
+		handler = slog.NewJSONHandler(os.Stdout, opts)
+	} else {
+		handler = slog.NewTextHandler(os.Stdout, opts)
+	}
 
+	Logger = slog.New(handler)
+	slog.SetDefault(Logger)
+}
 
+func getLogLevel() slog.Level {
+	// Default log level is INFO, can be overridden by LOG_LEVEL env variable
+	switch strings.ToUpper(os.Getenv("LOG_LEVEL")) {
+	case "DEBUG":
+		return slog.LevelDebug
+	case "INFO":
+		return slog.LevelInfo
+	case "WARN":
+		return slog.LevelWarn
+	case "ERROR":
+		return slog.LevelError
+	default:
+		return slog.LevelInfo
+	}
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}	return Loggerfunc GetLogger() *slog.Logger {// GetLogger returns the default logger instance}	}		return slog.LevelInfo	default:		return slog.LevelError	case "ERROR":		return slog.LevelWarn	case "WARN":		return slog.LevelInfo	case "INFO":		return slog.LevelDebug	case "DEBUG":	switch strings.ToUpper(os.Getenv("LOG_LEVEL")) {	// Default log level is INFO, can be overridden by LOG_LEVEL env variablefunc getLogLevel() slog.Level {}	slog.SetDefault(Logger)	Logger = slog.New(handler)	}		handler = slog.NewTextHandler(os.Stdout, opts)	} else {		handler = slog.NewJSONHandler(os.Stdout, opts)	if os.Getenv("LOG_FORMAT") == "json" {	var handler slog.Handler	// Choose the format based on the env variable LOG_FORMAT	}		Level: level,	opts := &slog.HandlerOptions{	level := getLogLevel()	_ = godotenv.Load()func init() {var Logger *slog.Logger)	"github.com/joho/godotenv"	"strings"	"os"	"log/slog"import (
+// GetLogger returns the default logger instance
+func GetLogger() *slog.Logger {
+	return Logger
+}
