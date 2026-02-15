@@ -115,7 +115,38 @@ go get github.com/pixime/mapbot-shared@latest
 - PostgreSQL 12+ (for database features)
 - Docker (for running tests with testcontainers)
 
-## 🔧 Usage in Projects
+## �️ Development Commands
+
+```bash
+# Show all available commands
+make help
+
+# Build all packages
+make build
+
+# Run tests
+make test
+
+# Run tests with coverage report
+make test-coverage
+
+# View HTML coverage report
+make coverage
+
+# Run linter (golangci-lint)
+make lint
+
+# Install dependencies
+make deps
+
+# Clean generated files
+make clean
+
+# Run all checks and build
+make all
+```
+
+## �🔧 Usage in Projects
 
 ### Standard Import
 
@@ -144,6 +175,21 @@ go work sync
 Now changes to `mapbot-shared` are immediately visible in other projects!
 
 ## 🧪 Running Tests
+
+Using Makefile (recommended):
+
+```bash
+# Run all tests
+make test
+
+# Run tests with coverage
+make test-coverage
+
+# View detailed HTML coverage report
+make coverage
+```
+
+Or directly with Go:
 
 ```bash
 # Run all tests
