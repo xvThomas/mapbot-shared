@@ -85,9 +85,10 @@ git push origin v0.2.0
 1. Check GitHub Actions: https://github.com/pixime/mapbot-shared/actions
 2. Verify release created: https://github.com/pixime/mapbot-shared/releases
 3. Test module availability:
-   ```bash
-   go list -m github.com/pixime/mapbot-shared@v0.2.0
-   ```
+
+```bash
+go list -m github.com/pixime/mapbot-shared@v0.2.0
+```
 
 ## 📋 Version History
 

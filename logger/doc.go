@@ -1,2 +1,2 @@
-// Package logger provides structured logging utilities with environment-based configuration.
+// Package logger provides colored console logging with configurable log levels.
 package logger
