@@ -98,14 +98,27 @@ jobs:
             IS_PRERELEASE=false
             CREATE_TAG=false
           else
-            # Pre-release from main branch
-            # Only get stable tags (exclude -dev, -alpha, -beta, -rc)
+            # Pre-release from main branch - use rc.N format
+            # Only get stable tags (exclude -rc, -alpha, -beta)
             LAST_TAG=$(git tag -l --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n1)
             if [ -z "$LAST_TAG" ]; then
               LAST_TAG="v0.0.0"
             fi
-            SHORT_SHA=$(git rev-parse --short HEAD)
-            VERSION="${LAST_TAG}-dev.${SHORT_SHA}"
+
+            # Find highest rc number for this base version
+            # Example: if LAST_TAG=v0.1.0, find v0.1.0-rc.1, v0.1.0-rc.2, etc.
+            HIGHEST_RC=$(git tag -l "${LAST_TAG}-rc.*" --sort=-version:refname | head -n1)
+
+            if [ -z "$HIGHEST_RC" ]; then
+              # No rc tags exist, start at rc.1
+              RC_NUM=1
+            else
+              # Extract number from tag like v0.1.0-rc.5 -> 5, then increment
+              RC_NUM=$(echo "$HIGHEST_RC" | grep -oE 'rc\.[0-9]+$' | grep -oE '[0-9]+$')
+              RC_NUM=$((RC_NUM + 1))
+            fi
+
+            VERSION="${LAST_TAG}-rc.${RC_NUM}"
             IS_PRERELEASE=true
             CREATE_TAG=false
           fi
