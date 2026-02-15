@@ -3,6 +3,8 @@
 [![Go Version](https://img.shields.io/github/go-mod/go-version/xvThomas/mapbot-shared)](https://go.dev/)
 [![License](https://img.shields.io/github/license/xvThomas/mapbot-shared)](LICENSE)
 [![Go Report Card](https://goreportcard.com/badge/github.com/xvThomas/mapbot-shared)](https://goreportcard.com/report/github.com/xvThomas/mapbot-shared)
+[![Coverage](https://codecov.io/gh/xvThomas/mapbot-shared/branch/main/graph/badge.svg)](https://codecov.io/gh/xvThomas/mapbot-shared)
+[![Release](https://img.shields.io/github/v/release/xvThomas/mapbot-shared?include_prereleases)](https://github.com/xvThomas/mapbot-shared/releases)
 
 Shared Go utilities for the MapBot project ecosystem. This module provides common functionality used across multiple MapBot services including database management, configuration, logging, and testing utilities.
 
