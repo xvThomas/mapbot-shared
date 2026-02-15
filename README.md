@@ -1,8 +1,8 @@
 # MapBot Shared - Shared Go Utilities
 
-[![Go Version](https://img.shields.io/github/go-mod/go-version/pixime/mapbot-shared)](https://go.dev/)
-[![License](https://img.shields.io/github/license/pixime/mapbot-shared)](LICENSE)
-[![Go Report Card](https://goreportcard.com/badge/github.com/pixime/mapbot-shared)](https://goreportcard.com/report/github.com/pixime/mapbot-shared)
+[![Go Version](https://img.shields.io/github/go-mod/go-version/xvThomas/mapbot-shared)](https://go.dev/)
+[![License](https://img.shields.io/github/license/xvThomas/mapbot-shared)](LICENSE)
+[![Go Report Card](https://goreportcard.com/badge/github.com/xvThomas/mapbot-shared)](https://goreportcard.com/report/github.com/xvThomas/mapbot-shared)
 
 Shared Go utilities for the MapBot project ecosystem. This module provides common functionality used across multiple MapBot services including database management, configuration, logging, and testing utilities.
 
@@ -13,7 +13,7 @@ Shared Go utilities for the MapBot project ecosystem. This module provides commo
 PostgreSQL database manager with connection pooling, health checks, and automatic migrations support.
 
 ```go
-import "github.com/pixime/mapbot-shared/database"
+import "github.com/xvThomas/mapbot-shared/database"
 
 cfg := config.NewPostgresDatabase("localhost", 5432, "mydb", "user", "pass")
 dm, err := database.NewDatabaseManager(cfg,
@@ -41,7 +41,7 @@ pool := dm.GetPool()
 Configuration structures and utilities for PostgreSQL connections.
 
 ```go
-import "github.com/pixime/mapbot-shared/config"
+import "github.com/xvThomas/mapbot-shared/config"
 
 cfg := config.NewPostgresDatabase("localhost", 5432, "mydb", "user", "pass")
 // Returns sensible defaults for production use
@@ -58,7 +58,7 @@ publicStr := cfg.PublicConnectionString()
 Structured logging with `slog` and environment-based configuration.
 
 ```go
-import "github.com/pixime/mapbot-shared/logger"
+import "github.com/xvThomas/mapbot-shared/logger"
 
 // Auto-configured via environment variables:
 // LOG_LEVEL=debug|info|warn|error (default: info)
@@ -73,7 +73,7 @@ log.Info("Application started", "version", "1.0.0")
 Testing utilities for integration tests with testcontainers.
 
 ```go
-import "github.com/pixime/mapbot-shared/testutils"
+import "github.com/xvThomas/mapbot-shared/testutils"
 
 func TestMyDatabase(t *testing.T) {
     // Automatically spins up PostGIS container, runs migrations, and cleans up
@@ -106,7 +106,7 @@ path := testutils.GetTestDataFilePath("sample.json")
 ## 🚀 Installation
 
 ```bash
-go get github.com/pixime/mapbot-shared@latest
+go get github.com/xvThomas/mapbot-shared@latest
 ```
 
 ## 📋 Requirements
@@ -152,10 +152,10 @@ make all
 
 ```go
 import (
-    "github.com/pixime/mapbot-shared/database"
-    "github.com/pixime/mapbot-shared/config"
-    "github.com/pixime/mapbot-shared/logger"
-    "github.com/pixime/mapbot-shared/testutils"
+    "github.com/xvThomas/mapbot-shared/database"
+    "github.com/xvThomas/mapbot-shared/config"
+    "github.com/xvThomas/mapbot-shared/logger"
+    "github.com/xvThomas/mapbot-shared/testutils"
 )
 ```
 
@@ -218,8 +218,8 @@ import (
     "context"
     "log"
 
-    "github.com/pixime/mapbot-shared/config"
-    "github.com/pixime/mapbot-shared/database"
+    "github.com/xvThomas/mapbot-shared/config"
+    "github.com/xvThomas/mapbot-shared/database"
 )
 
 func main() {
@@ -264,7 +264,7 @@ package mypackage_test
 import (
     "testing"
 
-    "github.com/pixime/mapbot-shared/testutils"
+    "github.com/xvThomas/mapbot-shared/testutils"
 )
 
 func TestUserRepository(t *testing.T) {
@@ -322,4 +322,4 @@ This module is part of the MapBot project. See the main [MapBot repository](http
 
 ## 📞 Support
 
-For issues and questions, please use the [GitHub issue tracker](https://github.com/pixime/mapbot-shared/issues).
+For issues and questions, please use the [GitHub issue tracker](https://github.com/xvThomas/mapbot-shared/issues).

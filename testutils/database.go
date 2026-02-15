@@ -7,8 +7,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pixime/mapbot-shared/config"
-	"github.com/pixime/mapbot-shared/database"
+	"github.com/xvThomas/mapbot-shared/config"
+	"github.com/xvThomas/mapbot-shared/database"
 
 	"github.com/testcontainers/testcontainers-go"
 	"github.com/testcontainers/testcontainers-go/modules/postgres"

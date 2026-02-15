@@ -16,10 +16,10 @@ This guide explains how to create and configure the `mapbot-shared` repository o
 cd /Users/xavierthomas/Documents/dev/LLM/mapbot/mapbot-shared
 
 # Create public repository
-gh repo create pixime/mapbot-shared --public --source=. --remote=origin --push
+gh repo create xvThomas/mapbot-shared --public --source=. --remote=origin --push
 
 # Or create private repository
-gh repo create pixime/mapbot-shared --private --source=. --remote=origin --push
+gh repo create xvThomas/mapbot-shared --private --source=. --remote=origin --push
 ```
 
 ### Option B: Using GitHub Web Interface
@@ -40,10 +40,10 @@ If you created the repo via web interface:
 cd /Users/xavierthomas/Documents/dev/LLM/mapbot/mapbot-shared
 
 # Add remote
-git remote add origin git@github.com:pixime/mapbot-shared.git
+git remote add origin git@github.com:xvThomas/mapbot-shared.git
 
 # Or if using HTTPS:
-# git remote add origin https://github.com/pixime/mapbot-shared.git
+# git remote add origin https://github.com/xvThomas/mapbot-shared.git
 
 # Set main branch
 git branch -M main
@@ -118,10 +118,10 @@ For public Go modules:
 
 ```bash
 # Trigger Go proxy to index the module
-curl -X POST "https://proxy.golang.org/github.com/pixime/mapbot-shared/@v/v0.1.0.info"
+curl -X POST "https://proxy.golang.org/github.com/xvThomas/mapbot-shared/@v/v0.1.0.info"
 
 # Verify it's available
-curl "https://proxy.golang.org/github.com/pixime/mapbot-shared/@latest"
+curl "https://proxy.golang.org/github.com/xvThomas/mapbot-shared/@latest"
 ```
 
 ## ✅ Verification Checklist
@@ -143,7 +143,7 @@ After repository is set up:
 
    ```bash
    cd ../mapbot-ai
-   go get github.com/pixime/mapbot-shared@v0.1.0
+   go get github.com/xvThomas/mapbot-shared@v0.1.0
    ```
 
 2. **Create Go Workspace** (see main WORKSPACE-SETUP.md)
@@ -156,7 +156,7 @@ After repository is set up:
 
 ```bash
 git remote remove origin
-git remote add origin git@github.com:pixime/mapbot-shared.git
+git remote add origin git@github.com:xvThomas/mapbot-shared.git
 ```
 
 ### Error: failed to push some refs
@@ -172,7 +172,7 @@ git push -u origin main
 Wait a few minutes for Go proxy to index, or force update:
 
 ```bash
-GOPROXY=direct go get github.com/pixime/mapbot-shared@v0.1.0
+GOPROXY=direct go get github.com/xvThomas/mapbot-shared@v0.1.0
 ```
 
 ## 📚 Additional Resources

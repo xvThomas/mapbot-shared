@@ -82,12 +82,12 @@ git push origin v0.2.0
 
 ### 4. Verify Release
 
-1. Check GitHub Actions: https://github.com/pixime/mapbot-shared/actions
-2. Verify release created: https://github.com/pixime/mapbot-shared/releases
+1. Check GitHub Actions: https://github.com/xvThomas/mapbot-shared/actions
+2. Verify release created: https://github.com/xvThomas/mapbot-shared/releases
 3. Test module availability:
 
 ```bash
-go list -m github.com/pixime/mapbot-shared@v0.2.0
+go list -m github.com/xvThomas/mapbot-shared@v0.2.0
 ```
 
 ## 📋 Version History
@@ -102,7 +102,7 @@ go list -m github.com/pixime/mapbot-shared@v0.2.0
 
 ### Future Versions
 
-See [GitHub Releases](https://github.com/pixime/mapbot-shared/releases) for complete version history.
+See [GitHub Releases](https://github.com/xvThomas/mapbot-shared/releases) for complete version history.
 
 ## 🔄 Updating Dependent Projects
 
@@ -111,7 +111,7 @@ After releasing a new version:
 ```bash
 # In mapbot-ai
 cd ../mapbot-ai
-go get github.com/pixime/mapbot-shared@v0.2.0
+go get github.com/xvThomas/mapbot-shared@v0.2.0
 go mod tidy
 git add go.mod go.sum
 git commit -m "Update mapbot-shared to v0.2.0"
@@ -119,7 +119,7 @@ git push
 
 # In french-admin-etl
 cd ../french-admin-etl
-go get github.com/pixime/mapbot-shared@v0.2.0
+go get github.com/xvThomas/mapbot-shared@v0.2.0
 go mod tidy
 git add go.mod go.sum
 git commit -m "Update mapbot-shared to v0.2.0"
@@ -150,10 +150,10 @@ Use during development or testing phases.
 
 ```bash
 # Work in progress (use pseudo-versions)
-go get github.com/pixime/mapbot-shared@main
+go get github.com/xvThomas/mapbot-shared@main
 
 # Specific commit
-go get github.com/pixime/mapbot-shared@abcd1234
+go get github.com/xvThomas/mapbot-shared@abcd1234
 ```
 
 ## 🔧 Version Management Tips
@@ -162,16 +162,16 @@ go get github.com/pixime/mapbot-shared@abcd1234
 
 ```bash
 # Latest stable
-go list -m github.com/pixime/mapbot-shared@latest
+go list -m github.com/xvThomas/mapbot-shared@latest
 
 # All versions
-go list -m -versions github.com/pixime/mapbot-shared
+go list -m -versions github.com/xvThomas/mapbot-shared
 ```
 
 ### Rollback to Previous Version
 
 ```bash
-go get github.com/pixime/mapbot-shared@v0.1.0
+go get github.com/xvThomas/mapbot-shared@v0.1.0
 go mod tidy
 ```
 
@@ -180,7 +180,7 @@ go mod tidy
 ```bash
 # Clear cache and update
 go clean -modcache
-go get -u github.com/pixime/mapbot-shared@latest
+go get -u github.com/xvThomas/mapbot-shared@latest
 ```
 
 ## 📝 Release Checklist
