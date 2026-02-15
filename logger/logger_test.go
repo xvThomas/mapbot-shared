@@ -312,9 +312,28 @@ func TestColorHandler_MultipleMessages(t *testing.T) {
 	}
 }
 
+// syncBuffer is a thread-safe buffer for testing concurrent writes
+type syncBuffer struct {
+	mu  sync.Mutex
+	buf bytes.Buffer
+}
+
+func (sb *syncBuffer) Write(p []byte) (n int, err error) {
+	sb.mu.Lock()
+	defer sb.mu.Unlock()
+	return sb.buf.Write(p)
+}
+
+func (sb *syncBuffer) String() string {
+	sb.mu.Lock()
+	defer sb.mu.Unlock()
+	return sb.buf.String()
+}
+
 // TestColorHandler_ConcurrentWrites tests thread-safety of handler
 func TestColorHandler_ConcurrentWrites(t *testing.T) {
-	buf := &bytes.Buffer{}
+	// Use a synchronized buffer for concurrent writes
+	buf := &syncBuffer{}
 	handler := NewColorHandler(buf, nil)
 
 	var wg sync.WaitGroup
