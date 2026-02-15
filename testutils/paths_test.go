@@ -43,19 +43,20 @@ func TestGetTestDataFilePath(t *testing.T) {
 
 	t.Run("actual file access", func(t *testing.T) {
 		testDir := filepath.Join(".", "testdata")
-		if err := os.MkdirAll(testDir, 0755); err != nil {
+		if err := os.MkdirAll(testDir, 0750); err != nil {
 			t.Fatalf("Failed to create testdata directory: %v", err)
 		}
-		defer os.RemoveAll(testDir)
+		defer func() { _ = os.RemoveAll(testDir) }()
 
 		testFile := filepath.Join(testDir, "test_file.txt")
 		testContent := []byte("test content")
-		if err := os.WriteFile(testFile, testContent, 0644); err != nil {
+		if err := os.WriteFile(testFile, testContent, 0600); err != nil {
 			t.Fatalf("Failed to create test file: %v", err)
 		}
 
 		path := GetTestDataFilePath("test_file.txt")
 
+		// #nosec G304 - Reading test file with dynamic path is intentional in tests
 		content, err := os.ReadFile(path)
 		if err != nil {
 			t.Errorf("GetTestDataFilePath() returned %q, cannot be read: %v", path, err)

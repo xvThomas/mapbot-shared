@@ -13,18 +13,18 @@ func TestSetupTestEnv(t *testing.T) {
 	// Test with existing environment variable - should not be overwritten
 	testVar := "TEST_SETUP_ENV_VAR"
 	expectedValue := "existing_value"
-	os.Setenv(testVar, expectedValue)
-	defer os.Unsetenv(testVar)
+	_ = os.Setenv(testVar, expectedValue)
+	defer func() { _ = os.Unsetenv(testVar) }()
 
 	// Create .env.test with different value for same variable
 	projectRoot := getProjectRoot()
 	envFile := filepath.Join(projectRoot, ".env.test")
 	testContent := testVar + "=new_value\n"
-	
-	if err := os.WriteFile(envFile, []byte(testContent), 0644); err != nil {
+
+	if err := os.WriteFile(envFile, []byte(testContent), 0600); err != nil {
 		t.Fatalf("Failed to create test .env.test: %v", err)
 	}
-	defer os.Remove(envFile)
+	defer func() { _ = os.Remove(envFile) }()
 
 	// Call SetupTestEnv - should not overwrite existing env var
 	SetupTestEnv(t)
@@ -38,7 +38,7 @@ func TestSetupTestEnv(t *testing.T) {
 func TestSetupTestEnvWithRequiredVarsOrSkipTest(t *testing.T) {
 	t.Run("skips test when required variable is missing", func(t *testing.T) {
 		mockT := &mockTestingT{TB: t}
-		os.Unsetenv("REQUIRED_VAR_THAT_DOES_NOT_EXIST")
+		_ = os.Unsetenv("REQUIRED_VAR_THAT_DOES_NOT_EXIST")
 
 		SetupTestEnvWithRequiredVarsOrSkipTest(mockT, "REQUIRED_VAR_THAT_DOES_NOT_EXIST")
 
@@ -49,8 +49,8 @@ func TestSetupTestEnvWithRequiredVarsOrSkipTest(t *testing.T) {
 
 	t.Run("continues when all required variables are set", func(t *testing.T) {
 		mockT := &mockTestingT{TB: t}
-		os.Setenv("REQUIRED_VAR_TEST", "some_value")
-		defer os.Unsetenv("REQUIRED_VAR_TEST")
+		_ = os.Setenv("REQUIRED_VAR_TEST", "some_value")
+		defer func() { _ = os.Unsetenv("REQUIRED_VAR_TEST") }()
 
 		SetupTestEnvWithRequiredVarsOrSkipTest(mockT, "REQUIRED_VAR_TEST")
 
@@ -61,9 +61,9 @@ func TestSetupTestEnvWithRequiredVarsOrSkipTest(t *testing.T) {
 
 	t.Run("checks multiple required variables", func(t *testing.T) {
 		mockT := &mockTestingT{TB: t}
-		os.Setenv("VAR1", "value1")
-		defer os.Unsetenv("VAR1")
-		os.Unsetenv("VAR2")
+		_ = os.Setenv("VAR1", "value1")
+		defer func() { _ = os.Unsetenv("VAR1") }()
+		_ = os.Unsetenv("VAR2")
 
 		SetupTestEnvWithRequiredVarsOrSkipTest(mockT, "VAR1", "VAR2")
 
@@ -92,7 +92,7 @@ type mockTestingT struct {
 	skipMessage string
 }
 
-func (m *mockTestingT) Skipf(format string, args ...interface{}) {
+func (m *mockTestingT) Skipf(format string, _ ...interface{}) {
 	m.skipped = true
 	m.skipMessage = format
 }
