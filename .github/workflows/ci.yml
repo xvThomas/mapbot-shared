@@ -96,15 +96,19 @@ jobs:
             # Stable release from tag
             VERSION=${GITHUB_REF#refs/tags/}
             IS_PRERELEASE=false
+            CREATE_TAG=false
           else
             # Pre-release from main branch
-            LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+            # Only get stable tags (exclude -dev, -alpha, -beta, -rc)
+            LAST_TAG=$(git tag -l --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 || echo "v0.0.0")
             SHORT_SHA=$(git rev-parse --short HEAD)
             VERSION="${LAST_TAG}-dev.${SHORT_SHA}"
             IS_PRERELEASE=true
+            CREATE_TAG=false
           fi
           echo "VERSION=$VERSION" >> $GITHUB_OUTPUT
           echo "IS_PRERELEASE=$IS_PRERELEASE" >> $GITHUB_OUTPUT
+          echo "CREATE_TAG=$CREATE_TAG" >> $GITHUB_OUTPUT
 
       - name: Generate changelog
         id: changelog
@@ -131,6 +135,7 @@ jobs:
           body_path: CHANGELOG.txt
           draft: false
           prerelease: ${{ steps.get_version.outputs.IS_PRERELEASE }}
+          make_latest: ${{ steps.get_version.outputs.IS_PRERELEASE == 'false' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
