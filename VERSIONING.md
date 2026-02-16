@@ -6,10 +6,10 @@ This document explains how to version and release `mapbot-shared`.
 
 We follow [Semantic Versioning 2.0.0](https://semver.org/):
 
-```
+```txt
 v<MAJOR>.<MINOR>.<PATCH>[-<PRERELEASE>]
 
-Example: v1.2.3, v2.0.0-beta.1
+Example: v1.2.3, v2.0.0-rc.1
 ```
 
 ### Version Components
@@ -65,7 +65,7 @@ Determine the version number based on changes:
 
 ```bash
 # For a new minor release (e.g., v0.2.0)
-git tag -a v0.2.0 -m "Release v0.2.0
+git tag -a v0.2.0 -m "Release v0.2.0"
 
 New features:
 - Added connection pool metrics
@@ -82,8 +82,8 @@ git push origin v0.2.0
 
 ### 4. Verify Release
 
-1. Check GitHub Actions: https://github.com/xvThomas/mapbot-shared/actions
-2. Verify release created: https://github.com/xvThomas/mapbot-shared/releases
+1. Check GitHub Actions: <https://github.com/xvThomas/mapbot-shared/actions>
+2. Verify release created: <https://github.com/xvThomas/mapbot-shared/releases>
 3. Test module availability:
 
 ```bash
@@ -130,7 +130,7 @@ git push
 
 ### Stable Releases
 
-```
+```txt
 v1.0.0, v1.1.0, v1.2.3
 ```
 
@@ -138,9 +138,7 @@ Use for production-ready code.
 
 ### Pre-releases
 
-```
-v1.0.0-alpha.1    # Early testing
-v1.0.0-beta.1     # Feature-complete, testing
+```txt
 v1.0.0-rc.1       # Release candidate, final testing
 ```
 
@@ -233,7 +231,3 @@ Cannot delete published versions from Go proxy. Options:
 2. **Publish a new patch version** (recommended)
 
 3. **Document in release notes** that version should not be used
-
-## 📞 Questions?
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) or open an issue.
