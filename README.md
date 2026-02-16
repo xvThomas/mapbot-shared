@@ -298,7 +298,7 @@ func TestUserRepository(t *testing.T) {
 
 Place your SQL migration files in a `migrations/` directory:
 
-```
+```txt
 migrations/
 ├── 000001_create_users_table.up.sql
 ├── 000001_create_users_table.down.sql
