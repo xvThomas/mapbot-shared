@@ -139,17 +139,41 @@ jobs:
               LAST_TAG="v0.0.0"
             fi
 
+            # Parse LAST_TAG version numbers
+            LAST_TAG_MAJOR=$(echo "$LAST_TAG" | sed -E 's/^v([0-9]+)\..*/\1/')
+            LAST_TAG_MINOR=$(echo "$LAST_TAG" | sed -E 's/^v[0-9]+\.([0-9]+)\..*/\1/')
+            LAST_TAG_PATCH=$(echo "$LAST_TAG" | sed -E 's/^v[0-9]+\.[0-9]+\.([0-9]+)$/\1/')
+
             # Cherche la dernière RC existante (toutes versions confondues)
             LAST_RC_TAG=$(git tag -l --sort=-version:refname | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+-rc\.[0-9]+$' | head -n1)
 
+            # Vérifie si la dernière RC est postérieure au dernier tag stable
+            SHOULD_CONTINUE_RC=false
             if [ -n "$LAST_RC_TAG" ]; then
-              # Si une RC existe, on continue la séquence sur la même base
+              # Parse RC base version
+              RC_BASE_VERSION=$(echo "$LAST_RC_TAG" | sed -E 's/-rc\.[0-9]+$//')
+              RC_MAJOR=$(echo "$RC_BASE_VERSION" | sed -E 's/^v([0-9]+)\..*/\1/')
+              RC_MINOR=$(echo "$RC_BASE_VERSION" | sed -E 's/^v[0-9]+\.([0-9]+)\..*/\1/')
+              RC_PATCH=$(echo "$RC_BASE_VERSION" | sed -E 's/^v[0-9]+\.[0-9]+\.([0-9]+)$/\1/')
+
+              # Compare versions: RC doit être > LAST_TAG
+              if [ "$RC_MAJOR" -gt "$LAST_TAG_MAJOR" ]; then
+                SHOULD_CONTINUE_RC=true
+              elif [ "$RC_MAJOR" -eq "$LAST_TAG_MAJOR" ] && [ "$RC_MINOR" -gt "$LAST_TAG_MINOR" ]; then
+                SHOULD_CONTINUE_RC=true
+              elif [ "$RC_MAJOR" -eq "$LAST_TAG_MAJOR" ] && [ "$RC_MINOR" -eq "$LAST_TAG_MINOR" ] && [ "$RC_PATCH" -gt "$LAST_TAG_PATCH" ]; then
+                SHOULD_CONTINUE_RC=true
+              fi
+            fi
+
+            if [ "$SHOULD_CONTINUE_RC" = true ]; then
+              # Continue la séquence RC existante (RC postérieure au dernier tag stable)
               BASE_VERSION=$(echo "$LAST_RC_TAG" | sed -E 's/-rc\.[0-9]+$//')
               RC_NUM=$(echo "$LAST_RC_TAG" | grep -oE 'rc\.[0-9]+$' | grep -oE '[0-9]+$')
               RC_NUM=$((RC_NUM + 1))
             else
-              # Sinon, nouvelle RC sur le patch suivant
-              BASE_VERSION=$(echo "$LAST_TAG" | awk -F. '{printf "v%d.%d.%d", $1=="v"?substr($1,2):$1, $2, $3+1}')
+              # Nouvelle RC sur le patch suivant du dernier tag stable
+              BASE_VERSION="v${LAST_TAG_MAJOR}.${LAST_TAG_MINOR}.$((LAST_TAG_PATCH + 1))"
               RC_NUM=1
             fi
 
