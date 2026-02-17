@@ -1,4 +1,4 @@
-module github.com/xvThomas/mapbot-shared
+module github.com/pixime-net/mapbot-shared
 
 go 1.24.0
 
