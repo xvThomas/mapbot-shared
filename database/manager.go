@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/xvThomas/mapbot-shared/config"
+	"github.com/pixime-net/mapbot-shared/config"
 
 	"github.com/jackc/pgx/v5/pgxpool"
 	// Import the pgx driver for database/sql

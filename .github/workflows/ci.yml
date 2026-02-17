@@ -193,4 +193,4 @@ jobs:
       - name: Update Go package index
         run: |
           # Trigger go.dev to index the new version
-          curl -X POST "https://proxy.golang.org/github.com/xvThomas/mapbot-shared/@v/${{ steps.get_version.outputs.VERSION }}.info" || true
+          curl -X POST "https://proxy.golang.org/github.com/pixime-net/mapbot-shared/@v/${{ steps.get_version.outputs.VERSION }}.info" || true
